@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {% form_theme form 'form_table_layout.html.twig' %}
-    {{ form(form) }}
-    <section id="uploaded">
-        <img src="/img/default.jpg" alt="" class="ui loader" style="width: 250px;">
+    <section class="ui basic segment">
+        {% form_theme form 'form_table_layout.html.twig' %}
+        {{ form(form) }}
+        <section id="loader" class="ui basic segment">
+            <div class="ui active loader"></div>
+        </section>
+        <section id="uploaded" class="ui basic segment">
+            <img src="/img/default.jpg" alt="" class="ui big image">
+        </section>
     </section>
 {% endblock %}
 
@@ -13,10 +18,12 @@
 
 {% block javascripts %}
     <script>
+        $('#loader').hide(0);
         $('#uploaded img').hide(0);
 
-        $('button').click(function (e) {
+        $('button').click(function(e) {
             e.preventDefault();
+            $('#loader').show();
             var data;
 
             data = new FormData();
@@ -32,8 +39,9 @@
                 processData: false,
                 contentType: false,
                 success: function(text) {
+                    $('#loader').hide(0);
                     $('#uploaded img').show();
-                    $('#uploaded img').attr('src', 'http://hoster.lan' + text['url'])
+                    $('#uploaded img').attr('src', text['url'])
                 }
             });
         })
